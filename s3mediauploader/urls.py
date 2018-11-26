@@ -5,5 +5,5 @@ from s3mediauploader.core import views
 
 
 urlpatterns = [
-    url(r'^$', views.DocumentCreateView.as_view(), name='home'),
+    url(r'^$', views.upload, name='home'),
 ]

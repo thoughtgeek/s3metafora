@@ -1,17 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from django.views.generic.edit import CreateView
-from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
 
 from .models import Document
+from .forms import DocumentForm
 
+def upload(request):
+    if request.method == 'POST':
+        form = DocumentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = DocumentForm()
 
-class DocumentCreateView(CreateView):
-    model = Document
-    fields = ['upload', ]
-    success_url = reverse_lazy('home')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        documents = Document.objects.all()
-        context['documents'] = documents
-        return context
+    documents = Document.objects.all()
+    return render(request, 'core/document_form.html', {
+        'form': form,
+        'documents':documents,
+    })
