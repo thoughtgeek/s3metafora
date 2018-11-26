@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+s3mediauploader/__pycache__/
 *.py[cod]
 *$py.class
 
