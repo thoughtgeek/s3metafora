@@ -7,8 +7,10 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.urlresolvers import reverse
 from django.core.files import File
 from django.utils.six import BytesIO
+from django.core.files.storage import default_storage
 import pandas as pd
 import json
+
 
 from PIL import Image
 from io import StringIO
@@ -41,7 +43,7 @@ class UploadImageTests(TestCase):
        '''
        url = reverse('home')
        avatar = create_image(None, 'avatar.png')
-       avatar_file = SimpleUploadedFile('front.png', avatar.getvalue())
+       avatar_file = SimpleUploadedFile('back.png', avatar.getvalue())
        data = {'upload': avatar_file}
        response = self.client.post(url, data, follow=True)
 
@@ -49,6 +51,7 @@ class UploadImageTests(TestCase):
        table_json = tables[0].to_json()
        table_dict = json.loads(table_json)
        table_name = table_dict['Name']
+       default_storage.delete(table_name['0'])
 
        self.assertNotEquals(table_name['0'],  'No data.')
        self.assertEquals(response.status_code, 200)
