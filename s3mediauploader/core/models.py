@@ -14,3 +14,8 @@ def randomizer(instance, filename):
 class Document(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     upload = models.FileField(upload_to=randomizer, null=True)
+
+    # @property
+    # def delFile(self):
+    #     print('Clicked')
+    #     return 'True'

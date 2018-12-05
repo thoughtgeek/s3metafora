@@ -31,3 +31,8 @@ table th {
 table thead {
   border-bottom: 2px solid #eceeef;
 }
+
+.boxhead a {
+    color: #FFFFFF;
+    text-decoration: none;
+}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title%}
+<title>s3MetaFora - FileList</title>
+{% endblock %}
+
+{% block content %}
+  <head>
+    <title>Uploaded File List</title>
+  </head>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Uploaded at</th>
+        <th>Size</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for document in documents %}
+        <tr>
+          <td><a href="{{ document.upload.url }}" target="_blank">{{ document.upload.name }}</a></td>
+          <td>{{ document.uploaded_at }}</td>
+          <td>{{ document.upload.size|filesizeformat }}</td>
+          <td>
+           <button class="delFile" value="{{ document.upload }}">Delete</button></td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="3">No data.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endblock %}
+
+  {% block script%}
+  <script type="text/javascript">
+      window.onload =function (){
+      var buttons = document.getElementsByClassName("delFile");
+      for (var i = 0; i < buttons.length; i++) {
+          buttons[i].addEventListener("click", DeleteFile);
+      } 
+      function DeleteFile(){
+          if (confirm("Are you sure you want to delete "+this.value+"?"))
+          {
+          var url  = "{% url 'filelist' %}";
+          var xhr  = new XMLHttpRequest();
+          var params = "delFile="+this.value
+          xhr.open('DELETE', url, true);
+          xhr.onload = function () {
+            window.location.reload();
+          }
+          xhr.send(params);
+          }
+      }}
+  </script>
+{% endblock %}

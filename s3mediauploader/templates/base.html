@@ -1,16 +1,18 @@
-{% load static %}<!DOCTYPE html>
+{% load static %}
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>s3mediaUploader</title>
+    {% block title  %}
+    {% endblock %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
   </head>
   <body>
     <div class="container">
       <header>
-        <h1>XOXZO - s3mediaUploader</h1>
+        <h1>XOXZO - s3MetaFora</h1>
         <hr>
-        <a href="{% url 'home' %}">Public Uploads</a>
+        <a href="{% url 'home' %}">Home</a>
         <hr>
       </header>
       <main>
@@ -18,5 +20,7 @@
         {% endblock %}
       </main>
     </div>
+    {% block script %}
+    {% endblock %}
   </body>
 </html>

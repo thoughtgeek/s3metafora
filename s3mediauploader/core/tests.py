@@ -75,4 +75,3 @@ class models_test(TestCase):
         returned_filename = randomizer(self, filename)
         self.assertNotEqual(filename, returned_filename)
 
-

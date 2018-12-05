@@ -6,4 +6,5 @@ from s3mediauploader.core import views
 
 urlpatterns = [
     url(r'^$', views.upload, name='home'),
+    url(r'^filelist$', views.filelist, name='filelist'),
 ]

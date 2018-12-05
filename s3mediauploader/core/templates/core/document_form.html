@@ -1,7 +1,10 @@
 {% extends 'base.html' %}
 
+{% block title%}
+<title>s3MetaFora</title>
+{% endblock %}
+
 {% block content %}
-  <h2>Public Uploads</h2>
   <h3>Upload to Amazon S3</h3>
 
   <form method="post" enctype="multipart/form-data">
@@ -9,6 +12,8 @@
     {{ form.as_p }}
     <button type="submit">Submit</button>
   </form>
+
+  <h3>Latest Uploaded Files:</h3>
 
   <table>
     <thead>
@@ -31,5 +36,10 @@
         </tr>
       {% endfor %}
     </tbody>
+    <table border="0">
+    <tr>
+        <td bgcolor="#fafafa" style="width:100%;"><a href="{% url 'filelist' %}" target="_blank" style="text-decoration: none;"><i><center>Click here for complete list of files...</center></i></a></td>
+    </tr>
+    </table>
   </table>
 {% endblock %}
