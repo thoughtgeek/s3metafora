@@ -21,16 +21,6 @@ def upload(request):
         'documents':documents,
     })
 
-# @csrf_exempt
-# def filelist(request):
-#     documents = Document.objects.all()
-#     if request.method == 'POST':
-#         print(str(request.POST.get('delFile')))
-#     return render(request, 'core/filelist.html', {
-#         'documents':documents,
-#     })
-
-
 @csrf_exempt
 def filelist(request):
     documents = Document.objects.all()
