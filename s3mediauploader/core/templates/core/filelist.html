@@ -5,10 +5,10 @@
 {% endblock %}
 
 {% block content %}
-  <head>
-    <title>Uploaded File List</title>
-  </head>
-  <table>
+  <div>
+  Search File:  <input type="text" id="searchInput" onkeyup="search()" placeholder="Enter filename.." style="width:30%; margin-bottom: 1%; margin-top: 1%">
+  </div>
+  <table id="filetable">
     <thead>
       <tr>
         <th>Name</th>
@@ -40,20 +40,39 @@
       window.onload =function (){
       var buttons = document.getElementsByClassName("delFile");
       for (var i = 0; i < buttons.length; i++) {
-          buttons[i].addEventListener("click", DeleteFile);
-      } 
-      function DeleteFile(){
+          buttons[i].addEventListener("click", deleteFile);
+      }
+      function deleteFile(){
           if (confirm("Are you sure you want to delete "+this.value+"?"))
-          {
-          var url  = "{% url 'filelist' %}";
-          var xhr  = new XMLHttpRequest();
-          var params = "delFile="+this.value
-          xhr.open('DELETE', url, true);
-          xhr.onload = function () {
-            window.location.reload();
+            {
+            var url  = "{% url 'filelist' %}";
+            var xhr  = new XMLHttpRequest();
+            var params = "delFile="+this.value
+            xhr.open('DELETE', url, false);
+            xhr.onload = function () {
+              window.location.reload();
+              }
+            xhr.send(params);
+            }
           }
-          xhr.send(params);
+      }
+
+      function search(){
+        var filter = document.getElementById("searchInput").value.toUpperCase();
+        var table = document.getElementById("filetable");
+        var tr = table.getElementsByTagName("tr");
+        console.log(filter);
+        for (i = 0; i < tr.length; i++) {
+          td = tr[i].getElementsByTagName("td")[0];
+          if (td) {
+            txtValue = td.textContent || td.innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+              tr[i].style.display = "";
+            } else {
+              tr[i].style.display = "none";
+            }
           }
-      }}
+        }
+      } 
   </script>
 {% endblock %}
