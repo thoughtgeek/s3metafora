@@ -30,7 +30,6 @@ def upload(request):
                 documentform_unsaved  = form.save(commit=False)
                 documentform_unsaved.uploader = request.user
                 documentform_unsaved.save()
-                # form.save()
                 return redirect('home')
         else:
             form = DocumentForm()
