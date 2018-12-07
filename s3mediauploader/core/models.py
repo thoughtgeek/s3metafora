@@ -1,7 +1,8 @@
-from django.db import models
 import os
 import random
-
+from django.db import models
+from django.conf import settings
+from django.contrib.auth.models import User
 
 def randomizer(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
@@ -14,8 +15,4 @@ def randomizer(instance, filename):
 class Document(models.Model):
     uploaded_at = models.DateTimeField(auto_now_add=True)
     upload = models.FileField(upload_to=randomizer, null=True)
-
-    # @property
-    # def delFile(self):
-    #     print('Clicked')
-    #     return 'True'
+    uploader = models.ForeignKey(User, db_column="user")

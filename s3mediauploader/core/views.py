@@ -27,7 +27,10 @@ def upload(request):
         if request.method == 'POST':
             form = DocumentForm(request.POST, request.FILES)
             if form.is_valid():
-                form.save()
+                documentform_unsaved  = form.save(commit=False)
+                documentform_unsaved.uploader = request.user
+                documentform_unsaved.save()
+                # form.save()
                 return redirect('home')
         else:
             form = DocumentForm()

@@ -20,6 +20,7 @@
         <th>Name</th>
         <th>Uploaded at</th>
         <th>Size</th>
+        <th>Uploaded by</th>
       </tr>
     </thead>
     <tbody>
@@ -28,6 +29,7 @@
           <td><a href="{{ document.upload.url }}" target="_blank">{{ document.upload.name }}</a></td>
           <td>{{ document.uploaded_at }}</td>
           <td>{{ document.upload.size|filesizeformat }}</td>
+          <td>{{ document.uploader.email }}</td>
         </tr>
       {% empty %}
         <tr>

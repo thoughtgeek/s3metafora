@@ -14,6 +14,7 @@
         <th>Name</th>
         <th>Uploaded at</th>
         <th>Size</th>
+        <th>Uploaded by</th>
         <th>Action</th>
       </tr>
     </thead>
@@ -23,6 +24,7 @@
           <td><a href="{{ document.upload.url }}" target="_blank">{{ document.upload.name }}</a></td>
           <td>{{ document.uploaded_at }}</td>
           <td>{{ document.upload.size|filesizeformat }}</td>
+          <td>{{ document.uploader.email }}</td>
           <td>
            <button class="delFile" value="{{ document.upload }}">Delete</button></td>
         </tr>
