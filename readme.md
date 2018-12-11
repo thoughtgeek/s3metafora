@@ -44,23 +44,24 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 * Set Permissions for IAM user -
 Add following policies to the user:
 
->AmazonAPIGatewayAdministrator
-AWS managed policy
->AmazonCloudDirectoryFullAccess
-AWS managed policy
->AmazonEC2FullAccess
-AWS managed policy
->AmazonS3FullAccess
-AWS managed policy
->AWSLambdaFullAccess
-AWS managed policy
->IAMFullAccess
-AWS managed policy
->AmazonVPCFullAccess
-AWS managed policy
->AWSCloud9Administrator
-AWS managed policy
->SecurityAudit
+
+* AmazonAPIGatewayAdministrator
+	* AWS managed policy
+* AmazonCloudDirectoryFullAccess
+	* AWS managed policy
+* AmazonEC2FullAccess
+	* AWS managed policy
+* AmazonS3FullAccess
+	* AWS managed policy
+* AWSLambdaFullAccess
+	* AWS managed policy
+* IAMFullAccess
+	* AWS managed policy
+* AmazonVPCFullAccess
+	* AWS managed policy
+* AWSCloud9Administrator
+	* AWS managed policy
+* SecurityAudit
 
 Add custom policy to give IAM user full access to Cloudformation:
 ```json
