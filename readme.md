@@ -96,9 +96,9 @@ In zappa_settings.json replace 'dev' with the name of your deployment and settin
         ...
         "environment_variables": {
             "AWS_ACCESS_KEY_ID": "your_value",
-            "SECRET_KEY" = "your_value",
-            "AWS_SECRET_ACCESS_KEY" = "your_value",
-            "AWS_STORAGE_BUCKET_NAME" = "your_value",
+            "SECRET_KEY" : "your_value",
+            "AWS_SECRET_ACCESS_KEY" : "your_value",
+            "AWS_STORAGE_BUCKET_NAME" : "your_value",
 
         }
     },
