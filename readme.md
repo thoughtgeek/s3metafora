@@ -1,46 +1,42 @@
-            AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-//////////////////////
-
-	 # README #
-
-//////////////////////
-
-### Instructions to run on localhost or EC2 instance ###
+ 
+# s3Metafora - README
+### A simple S3 file uploader
+---
+#### Instructions to run on localhost or EC2 instance
 
 * Add a file '.env' in the root with the following information:
-
+```python
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
 AWS_STORAGE_BUCKET_NAME = ''
 SECRET_KEY = ''
+```
+
+# Zappa Deployment Steps
 
 
-///////////////////////
-
-# Zappa Deployment Steps #
-
-///////////////////////
-
-### Instructions to run on AWS lambda ### 
+#### Instructions to run on AWS lambda
 
 * In settings.py -
 Add this line:
+```python
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
+```
 Replace the following lines in settings.py:
-
+```python
 SECRET_KEY = config('SECRET_KEY')
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+```
 
 By,
-
+```python
 SECRET_KEY = os.environ.get('SECRET_KEY')
 AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
-
+```
 
 ** Set the database in settings.py and run 'python manage.py migrate --run-syncdb' **
 
@@ -67,7 +63,7 @@ AWS managed policy
 >SecurityAudit
 
 Add custom policy to give IAM user full access to Cloudformation:
-
+```json
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -79,20 +75,22 @@ Add custom policy to give IAM user full access to Cloudformation:
         }
     ]
 }
-
+```
 * Add AWS credentials -
 Create a new directory and file ~.aws/credentials and add the following lines:
-
+```python
 [default]
 aws_access_key_id = YOUR ACCESS KEY
 aws_secret_access_key = YOUR SECRET ACCESS KEY
-
+```
 * Deploy -
 Run:  
+```sh
 python manage.py collectstatic
 zappa init
-
+```
 In zappa_settings.json replace 'dev' with the name of your deployment and setting its corrosponding values:
+```json
 {
     "dev": {
         ...
@@ -106,7 +104,8 @@ In zappa_settings.json replace 'dev' with the name of your deployment and settin
     },
     ...
 }
-
+```
+```sh
 zappa deploy
-
+```
 
