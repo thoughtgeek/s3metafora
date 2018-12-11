@@ -3,8 +3,6 @@ from decouple import config
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = config('SECRET_KEY')
-
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -20,7 +18,7 @@ INSTALLED_APPS = [
 
     'storages',
 
-    's3mediauploader.core',
+    's3metafora.core',
 ]
 
 MIDDLEWARE = [
@@ -33,12 +31,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 's3mediauploader.urls'
+ROOT_URLCONF = 's3metafora.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 's3mediauploader/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 's3metafora/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -51,7 +49,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 's3mediauploader.wsgi.application'
+WSGI_APPLICATION = 's3metafora.wsgi.application'
 
 
 # Database
@@ -74,18 +72,20 @@ USE_L10N = True
 USE_TZ = True
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 's3mediauploader/static'),
+    os.path.join(BASE_DIR, 's3metafora/static'),
 ]
 STATIC_URL = '/static/'
 
 
+SECRET_KEY = config('SECRET_KEY')
 AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = config('AWS_STORAGE_BUCKET_NAME')
+
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 
-DEFAULT_FILE_STORAGE = 's3mediauploader.storage_backends.MediaStorage'
+DEFAULT_FILE_STORAGE = 's3metafora.storage_backends.MediaStorage'
