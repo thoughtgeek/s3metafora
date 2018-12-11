@@ -1,10 +1,9 @@
- 
 # s3Metafora - README
 ### A simple S3 file uploader
 ---
-#### Instructions to run on localhost or EC2 instance
+#### Instructions to run on localhost or EC2 instance:
 
-* Add a file '.env' in the root with the following information:
+Add a file '.env' in the root with the following information
 ```python
 AWS_ACCESS_KEY_ID = ''
 AWS_SECRET_ACCESS_KEY = ''
@@ -17,8 +16,7 @@ SECRET_KEY = ''
 
 #### Instructions to run on AWS lambda
 
-* In settings.py -
-Add this line:
+In settings.py add this line:
 ```python
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 ```
@@ -41,10 +39,9 @@ AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 ** Set the database in settings.py and run 'python manage.py migrate --run-syncdb' **
 
 
-* Set Permissions for IAM user -
-Add following policies to the user:
+Set permissions for IAM user, by adding following policies to the user:
 
-
+```
 * AmazonAPIGatewayAdministrator
 	* AWS managed policy
 * AmazonCloudDirectoryFullAccess
@@ -62,7 +59,7 @@ Add following policies to the user:
 * AWSCloud9Administrator
 	* AWS managed policy
 * SecurityAudit
-
+```
 Add custom policy to give IAM user full access to Cloudformation:
 ```json
 {
@@ -77,20 +74,20 @@ Add custom policy to give IAM user full access to Cloudformation:
     ]
 }
 ```
-* Add AWS credentials -
+Add AWS credentials -
 Create a new directory and file ~.aws/credentials and add the following lines:
 ```python
 [default]
 aws_access_key_id = YOUR ACCESS KEY
 aws_secret_access_key = YOUR SECRET ACCESS KEY
 ```
-* Deploy -
-Run:  
+To deploy, run:  
 ```sh
 python manage.py collectstatic
 zappa init
 ```
 In zappa_settings.json replace 'dev' with the name of your deployment and setting its corrosponding values:
+
 ```json
 {
     "dev": {
@@ -106,7 +103,8 @@ In zappa_settings.json replace 'dev' with the name of your deployment and settin
     ...
 }
 ```
+
+Finally,
 ```sh
 zappa deploy
 ```
-
