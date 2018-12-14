@@ -11,7 +11,46 @@ AWS_STORAGE_BUCKET_NAME = ''
 SECRET_KEY = ''
 ```
 
+
+# AWS Aurora Serverless - Interfacing with Lambda deployment
+
+#### Create new VPC for RDS and Lambda:
+
+Create a new VPC. Create 2 subnets with 2 different region selection(Preferably same region, different subregions) using AWS Web Portal. Note down the subnet ids and security group ids.
+
+#### Create Serverless Aurora RDS:
+
+```sh
+pip install aws
+aws configure
+```
+
+Run the following to create db subnet group: (Remember there must be atleast 2 subnets in 2 different regions)
+```sh
+aws rds create-db-subnet-group --db-subnet-group-name <DB Subnet Group Name> --db-subnet-group-description <Subnet Group Description> --subnet-ids <Subnet Id 1> <Subnet Id 2>..
+```
+Run the following to finally create the Aurora Serverless RDS with the database initialized:
+```sh
+aws rds create-db-cluster --db-cluster-identifier <Cluster Name> --engine aurora --engine-version 5.6.10a --engine-mode serverless --scaling-configuration MinCapacity=4,MaxCapacity=8,SecondsUntilAutoPause=1000,AutoPause=true --master-username <Username> --master-user-password <Password> --database-name <DB name> --db-subnet-group-name <DB Subnet Group Name> --vpc-security-group-ids <Security Group ID>
+```
+#### Use Zappa to initialize DB after it is deployed:
+```sh
+zappa manage dev "migrate --run-syncdb"
+```
+And for creating the first user:
+```sh
+zappa manage dev create_admin_user <auth_token> <email> <auth_token>
+```
+If using SQLite on localhost
+** Set the database in settings.py and run 'python manage.py migrate --run-syncdb' **
+
 # Zappa Deployment Steps
+
+#### Setting up Lambda Environment variables:
+Use the web portal to set up the environment variables to the lambda function 's3metafora-<deployment_name>' or use AWS CLI:
+```sh
+aws lambda update-function-configuration --function-name <s3metafora-<deployment_name>> --environment Variables={KeyName1=string,KeyName2=string}
+``` 
 
 
 #### Instructions to run on AWS lambda
@@ -35,29 +74,25 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 ```
-
-** Set the database in settings.py and run 'python manage.py migrate --run-syncdb' **
-
-
 Set permissions for IAM user, by adding following policies to the user:
 
 ```
 * AmazonAPIGatewayAdministrator
-	* AWS managed policy
+    * AWS managed policy
 * AmazonCloudDirectoryFullAccess
-	* AWS managed policy
+    * AWS managed policy
 * AmazonEC2FullAccess
-	* AWS managed policy
+    * AWS managed policy
 * AmazonS3FullAccess
-	* AWS managed policy
+    * AWS managed policy
 * AWSLambdaFullAccess
-	* AWS managed policy
+    * AWS managed policy
 * IAMFullAccess
-	* AWS managed policy
+    * AWS managed policy
 * AmazonVPCFullAccess
-	* AWS managed policy
+    * AWS managed policy
 * AWSCloud9Administrator
-	* AWS managed policy
+    * AWS managed policy
 * SecurityAudit
 ```
 Add custom policy to give IAM user full access to Cloudformation:
@@ -74,7 +109,7 @@ Add custom policy to give IAM user full access to Cloudformation:
     ]
 }
 ```
-Add AWS credentials -
+Add AWS credentials - (In case AWS CLI not installed and configured)
 Create a new directory and file ~.aws/credentials and add the following lines:
 ```python
 [default]
@@ -108,3 +143,4 @@ Finally,
 ```sh
 zappa deploy
 ```
+
