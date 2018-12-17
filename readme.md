@@ -12,15 +12,14 @@ SECRET_KEY = ''
 ```
 # Zappa Deployment Steps
 
-#### Setting up Lambda Environment variables:
-Use the web portal to set up the environment variables to the lambda function 's3metafora-<deployment_name>' or use AWS CLI.
-Set the following variables: `SECRET_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME`using aws portal or aws cli like this:
+#### Install required packages and zappa:
+Required packages to be installed first as Zappa requires specific versions of the required packages
 ```sh
-aws lambda update-function-configuration --function-name <s3metafora-<deployment_name>> --environment Variables={KeyName1=string,KeyName2=string}
-``` 
+pip install -r requirements.txt
+pip install zappa
+```
 
-
-#### Instructions to run on AWS lambda
+#### Instructions to edit settings.py before 'zappa init':
 
 In settings.py add this line:
 ```python
@@ -76,6 +75,24 @@ Add custom policy to give IAM user full access to Cloudformation:
     ]
 }
 ```
+#### Initialize zappa deployment:
+After following instructions to edit settings.py and deploy 1st time:
+```sh
+zappa init
+zappa deploy <deployment name>
+```
+
+
+#### Setting up Lambda Environment variables:
+Use the web portal to set up the environment variables to the lambda function 's3metafora-<deployment_name>' or use AWS CLI.
+Set the following variables: `SECRET_KEY, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_STORAGE_BUCKET_NAME`using aws portal(Recommended) or aws cli like this:
+```sh
+pip install awscli
+aws lambda update-function-configuration --function-name <s3metafora-<deployment_name>> --environment Variables={SECRET_KEY=<value>,AWS_ACCESS_KEY_ID=<value>,AWS_SECRET_ACCESS_KEY=<value>,AWS_STORAGE_BUCKET_NAME=<value>}
+```
+
+
+
 
 # AWS Aurora Serverless - Interfacing with Lambda deployment
 
@@ -86,7 +103,7 @@ Create a new VPC. Create 2 subnets with 2 different region selection(Preferably 
 #### Create Serverless Aurora RDS:
 
 ```sh
-pip install aws
+pip install awscli
 aws configure
 ```
 
@@ -98,6 +115,39 @@ Run the following to finally create the Aurora Serverless RDS with the database 
 ```sh
 aws rds create-db-cluster --db-cluster-identifier <Cluster Name> --engine aurora --engine-version 5.6.10a --engine-mode serverless --scaling-configuration MinCapacity=4,MaxCapacity=8,SecondsUntilAutoPause=1000,AutoPause=true --master-username <Username> --master-user-password <Password> --database-name <DB name> --db-subnet-group-name <DB Subnet Group Name> --vpc-security-group-ids <Security Group ID>
 ```
+#### Change settings.py to connect to serverless RDS:
+Change the following lines
+```sh
+# Database
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+```
+to 
+```sh
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': <RDS name>,
+        'USER': <RDS username>,
+        'PASSWORD': <RDS password>,
+        'HOST': <RDS endpoint>,
+        'PORT': '3306',
+    }
+}
+```
+And install mySQL client: `pip install mysqlclient`
+####  Add VPC information in zappa_settings.json:
+Add the following entry in the zappa_settings.json:
+```
+        "vpc_config": {
+            "SubnetIds": [<subnetvalue1>, <subnetvalue2>],
+            "SecurityGroupIds": [ <SgGroupIdvalue> ],}
+```            
+
 #### Use Zappa to initialize DB after it is deployed:
 ```sh
 zappa manage dev "migrate --run-syncdb"
