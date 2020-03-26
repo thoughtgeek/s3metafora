@@ -1,5 +1,5 @@
 # s3Metafora - README
-### A simple S3 file uploader
+### A simple S3 file uploader based on django web framework
 ---
 #### Instructions to run on localhost or EC2 instance:
 
